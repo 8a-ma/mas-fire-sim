@@ -1,11 +1,10 @@
 from fastapi import FastAPI, Response
-from config.settings import Settings
+from .config.settings import Settings
 
 
 settings = Settings()
 
 app = FastAPI(
-    title=settings.APP_NAME,
     version=settings.APP_VERSION,
     root_path="/api/v1"
 )
