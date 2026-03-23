@@ -2,6 +2,8 @@ from __future__ import annotations
 import numpy as np
 from abc import ABC, abstractmethod
 from simulation.agents.context import SimContext
+from simulation.control.control_law import attraction as ctrl_attraction
+from simulation.control.repulsion import repulsion as ctrl_repulsion
 
 
 VALID_STATUSES = {"active", "deploying", "idle", "out_of_range"}
@@ -49,33 +51,14 @@ class BaseAgent(ABC):
         ...
 
     def _attraction(self, target: np.ndarray, alpha: float) -> np.ndarray:
-        """
-        Término de atracción hacia target.
-        Implementa:  α · (x_desired - x_i)
-        """
-
-        return alpha * (target - self.pos)
+        return ctrl_attraction(self.pos, target, alpha)
 
     def _repulsion(self, neighbors: list["BaseAgent"], min_dist: float = 10.0) -> np.ndarray:
-        """
-        Término de repulsión respecto a los vecinos del grafo.
-        Implementa:  Σ f_rep(x_i, x_j)
- 
-        f_rep es inversamente proporcional a la distancia — cuanto más
-        cerca está un vecino, mayor es la fuerza que lo aleja.
-        Se ignora si la distancia supera min_dist (fuera de zona de repulsión).
-        """
-
-        force = np.zeros(2)
-        
-        for neighbor in neighbors:
-            diff = self.pos - neighbor.pos
-            dist = np.linalg.norm(diff)
-
-            if 0 < dist < min_dist:
-                force += (diff / dist) * (min_dist - dist) / min_dist
-        
-        return force
+        return ctrl_repulsion(
+            self.pos,
+            [n.pos for n in neighbors],
+            min_dist=min_dist,
+        )
     
     def _move(self, force: np.ndarray, dt: float, grid_size: int = 256) -> None:
         """
