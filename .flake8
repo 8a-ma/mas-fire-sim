@@ -1,0 +1,9 @@
+[flake8]
+ignore = E203, E266, E501, W503, E402, W292, E722, E731, E712, E711, C901, E225, E111, F401, F841, W291, W293, E701
+max-line-length = 100
+max-complexity = 10
+exclude = .git,__pycache__,.venv
+
+[pep8]
+ignore = E203, E266, E501, W503
+max-line-length = 88
