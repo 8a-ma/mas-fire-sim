@@ -41,3 +41,6 @@ Un incendio forestal se propaga en un grid 2D discreto. Tres tipos de agentes op
 1. Estabilidad: El sistema soporta un throughput de $\ge 500\text{ msg/s}$ sin perder paquetes.
 2. Eficiencia: La tasa de tareas duplicadas es inferior al $2\%$.
 3. Integración: Los agentes se comunican exclusivamente a través del bus de mensajes, no mediante acceso directo al estado global.
+
+# Técnico
+- Python 3.12
