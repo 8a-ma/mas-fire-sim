@@ -1,8 +1,12 @@
 /*
 
+**.pyc
+
 !*.gitignore
 
 !src/
 !src/**
+
+src/**/__pycache__/
 
 !*.md
