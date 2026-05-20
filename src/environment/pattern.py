@@ -32,7 +32,7 @@ class Pattern:
             'icon': '💧',
             'rules': [
                 ['water', 0.2],
-                ['grass', 0.45],
+                ['grass', 0.66],
                 ['mountain', 0.25],
             ],
             'color': '#2FD6D4'
@@ -46,7 +46,7 @@ class Pattern:
                 ['water', 0.15]
             ],
             'color': '#ffffff'
-        }
+        },
     ]
 
     @classmethod
