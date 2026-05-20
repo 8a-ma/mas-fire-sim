@@ -22,8 +22,8 @@ class Pattern:
             'type': 'grass',
             'icon': '🌿',
             'rules': [
-                ['grass', 1],
-                ['mountain', 0.01],
+                ['grass', 0.9],
+                ['mountain', 0.1],
             ],
             'color': '#1A7824'
         },
@@ -31,9 +31,9 @@ class Pattern:
             'type': 'water',
             'icon': '💧',
             'rules': [
-                ['water', 0.25],
-                ['grass', 0.7],
-                ['mountain', 0.15],
+                ['water', 0.2],
+                ['grass', 0.45],
+                ['mountain', 0.25],
             ],
             'color': '#2FD6D4'
         },
@@ -41,9 +41,9 @@ class Pattern:
             'type': 'mountain',
             'icon': '🏔️',
             'rules': [
-                ['grass', 0.5],
-                ['mountain', 0.8],
-                ['water', 0.001]
+                ['grass', 0.55],
+                ['mountain', 0.3],
+                ['water', 0.15]
             ],
             'color': '#ffffff'
         }
@@ -81,6 +81,16 @@ class Pattern:
         pattern = cls.get_pattern_by_type(pattern_type)
 
         return {rule[0] for rule in pattern['rules']}
+
+    @classmethod
+    def get_neighbor_weights(cls, pattern_type: str) -> Dict[str, float]:
+        """
+        Retorna los pesos que este patrón le asigna a cada tipo vecino.
+        """
+
+        pattern = cls.get_pattern_by_type(pattern_type)
+
+        return {rule[0]: rule[1] for rule in pattern['rules']}
 
     @classmethod
     def build_adjacency_map(cls) -> Dict[str, Set[str]]:

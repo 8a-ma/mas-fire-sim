@@ -28,7 +28,7 @@ class WaveFunctionCollapse:
         Genera el terreno usando Wave Function Collapse.
         """
 
-        for attempt in range(max_attempts):
+        for _ in range(max_attempts):
             self.terrain = Terrain(self.grid_size, self.all_types)
 
             # Iniciar con una celda aleatoria
@@ -54,8 +54,7 @@ class WaveFunctionCollapse:
  
                 # Colapsar con una posibilidad aleatoria
                 cell = self.terrain.get_cell(row, col)
-                possible_types = list(cell.possibilities)
-                chosen_type = random.choice(possible_types)
+                chosen_type = self._get_weighted_type(row, col, cell.possibilities)
  
                 if not self._collapse_cell(row, col, chosen_type):
                     # El colapso falló, intentar siguiente iteración
@@ -121,14 +120,51 @@ class WaveFunctionCollapse:
         """
         Finaliza el terreno colapsando cualquier celda restante.
         """
-        
+
         for row in range(self.grid_size):
             for col in range(self.grid_size):
                 cell = self.terrain.get_cell(row, col)
 
                 if not cell.is_collapsed and cell.get_entropy > 0:
-                    chosen_type = random.choice(list(cell.possibilities))
+                    chosen_type = self._get_weighted_type(row, col, cell.possibilities)
                     cell.collapse(chosen_type)
+    
+    def _get_weighted_type(self, row: int, col: int, possibilities: set) -> str:
+        """
+        Elige un tipo de entre las posibilidades usando los pesos acumulados
+        de los vecinos ya colapsados.
+ 
+        Para cada vecino colapsado se consultan sus rules: cada rule define
+        qué tipos quiere tener como vecino y con qué peso. Se acumulan los
+        pesos sobre los tipos posibles de esta celda y se elige con
+        random.choices(), respetando así las probabilidades de Pattern.
+ 
+        Si ningún vecino está colapsado aún (p.ej. la celda inicial),
+        se trata cada tipo con peso uniforme.
+        """
+
+        # Acumular pesos: {tipo: peso_total} para los tipos posibles
+        accumulated: Dict[str, float] = {t: 0.0 for t in possibilities}
+
+        for nr, nc, _ in self.terrain.get_neighbors(row, col):
+            neighbor_cell = self.terrain.get_cell(nr, nc)
+
+            if neighbor_cell.is_collapsed:
+                neighbor_type = neighbor_cell.get_pattern_type()
+
+                neighbor_weights = Pattern.get_neighbor_weights(neighbor_type)
+
+                for candidate_type, weight in neighbor_weights.items():
+                    if candidate_type in accumulated:
+                        accumulated[candidate_type] += weight
+        
+        types = list(accumulated.keys())
+        weights = [accumulated[t] for t in types]
+
+        if sum(weights) == 0:
+            weights = [1.0] * len(types)
+        
+        return random.choices(types, weights=weights, k=1)[0]
     
     def render(self) -> str:
         """

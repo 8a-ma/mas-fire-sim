@@ -1,7 +1,7 @@
+from collections import Counter
 from settings.settings import Settings
 from environment.pattern import Pattern
 from utils.wfc import WaveFunctionCollapse
-from collections import Counter
 
 
 def get_terrain_stats(wfc):
@@ -22,9 +22,6 @@ def get_terrain_stats(wfc):
     for pattern_type, count in counts.most_common():
         percentage = (count / total) * 100
         print(f"  {pattern_type:12} {count:3} celdas ({percentage:5.1f}%)")
-
-
-
 
 
 def main():
@@ -60,7 +57,6 @@ def main():
     print(wfc.render())
     print("=" * (settings.GRID_SIZE * 2))
     print()
-    get_terrain_stats(wfc)
 
 if __name__ == '__main__':
     main()
