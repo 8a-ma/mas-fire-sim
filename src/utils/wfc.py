@@ -41,7 +41,7 @@ class WaveFunctionCollapse:
             if not self._collapse_cell(start_row, start_col, initial_type):
                 continue
 
-             # Continuar colapsando celdas con menor entropía
+            # Continuar colapsando celdas con menor entropía
             while True:
                 cell_coords = self.terrain.get_minimum_entropy_cell()
  

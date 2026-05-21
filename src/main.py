@@ -27,7 +27,7 @@ def get_terrain_stats(wfc):
 def main():
     settings = Settings()
 
-    print(f"🎮 Generador de Terreno - Wave Function Collapse")
+    print("🎮 Generador de Terreno - Wave Function Collapse")
     print(f"📏 Tamaño de grilla: {settings.GRID_SIZE}x{settings.GRID_SIZE}")
     print(f"🎨 Patrones disponibles: {len(Pattern.get_all_types())}")
     print()
@@ -50,6 +50,7 @@ def main():
     print(wfc.render())
     print("=" * (settings.GRID_SIZE * 2))
     print()
+
 
 if __name__ == '__main__':
     main()
