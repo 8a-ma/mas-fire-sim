@@ -1,4 +1,11 @@
+from __future__ import annotations
 from typing import Set, Optional
+from enum import Enum, auto
+
+class FireState(Enum):
+    NORMAL      = auto()
+    BURNING     = auto()
+    BURNED      = auto()
 
 
 class Cell:
@@ -10,6 +17,9 @@ class Cell:
     def __init__(self, possible_types: Set[str]):
         self.possibilities: Set[str] = possible_types.copy()
         self.collapsed_type: Optional[str] = None
+        self.fire_state: FireState = FireState.NORMAL
+    
+    # --- WFC ---
     
     def collapse(self, pattern_type: str) -> None:
         """
@@ -46,3 +56,34 @@ class Cell:
         if self.is_collapsed: return self.collapsed_type
 
         return None
+    
+    # --- FSM ---
+
+    @property
+    def is_flammable(self) -> bool:
+        """
+        True si la celda puede ser encendida.
+        Requiere: estar colapsada, el patrón registrado como inflamable, y no estar ya ardiendo o quemada.
+        """
+
+        from patterns.registry import PatternRegistry
+        
+        
+        if not self.is_collapsed or self.fire_state != FireState.NORMAL: return False
+
+        return PatternRegistry.is_flammable(self.collapsed_type)
+    
+    def ignite(self) -> bool:
+        """NORMAL → BURNING. Retorna True si la transición ocurrió."""
+
+        if self.fire_state == FireState.NORMAL and self.is_flammable:
+            self.fire_state = FireState.BURNING
+
+            return True
+    
+        return False
+    
+    def burn_out(self) -> None:
+        """BURNING → BURNED."""
+        if self.fire_state == FireState.BURNING:
+            self.fire_state = FireState.BURNED

@@ -74,3 +74,9 @@ class PatternRegistry:
             )
         
         return cls._registry[pattern_type]
+
+    @classmethod
+    def is_flammable(cls, pattern_type: str) -> bool:
+        """Retorna True si el patrón fue registrado con flammable=True"""
+
+        return cls._get(pattern_type).get("flammable", False)

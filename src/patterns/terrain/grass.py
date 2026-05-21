@@ -19,5 +19,6 @@ PatternRegistry.register(
     .adjacent_to('grass', affinity=0.9)
     .adjacent_to('mountain', affinity=0.3)
     .adjacent_to('water', affinity=0.2)
+    .flammable(True)
     .build()
 )

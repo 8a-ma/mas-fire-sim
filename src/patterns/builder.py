@@ -29,6 +29,7 @@ class PatternBuilder:
         self._icon = icon
         self._color = '#000000'
         self._rules = []
+        self._flammable = False
     
     def color(self, hex_color: str) -> 'PatternBuilder':
         self._color = hex_color
@@ -52,6 +53,15 @@ class PatternBuilder:
 
         return self
 
+    def flammable(self, value: bool = True) -> 'PatternBuilder':
+        """
+        Marca el patrón como inflamable (o no)
+        """
+
+        self._flammable = value
+        
+        return self
+
     def build(self) -> Dict:
         """
         Valida los campos y retorna el diccionario de patrón listo para
@@ -65,6 +75,7 @@ class PatternBuilder:
             'icon': self._icon,
             'color': self._color,
             'rules': self._rules,
+            'flammable': getattr(self, '_flammable', False),
         }
     
     def _validate(self) -> None:
