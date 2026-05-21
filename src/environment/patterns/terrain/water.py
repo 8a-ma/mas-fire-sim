@@ -7,6 +7,6 @@ PatternRegistry.register(
     .color('#2FD6D4')
     .adjacent_to('water', affinity=0.2)
     .adjacent_to('grass', affinity=0.66)
-    .adjacent_to('mountain', affinity=0.25)
+    .adjacent_to('mountain', affinity=0.05)
     .build()
 )
