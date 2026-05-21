@@ -29,14 +29,7 @@ def main():
 
     print(f"🎮 Generador de Terreno - Wave Function Collapse")
     print(f"📏 Tamaño de grilla: {settings.GRID_SIZE}x{settings.GRID_SIZE}")
-    print(f"🎨 Patrones disponibles: {len(Pattern.VALID_PATTERN)}")
-    print()
-
-    print("Patrones:")
-    for pattern in Pattern.VALID_PATTERN:
-        # Extraer tipos y probabilidades de las reglas
-        rules_str = ", ".join([f"{rule[0]}({rule[1]})" for rule in pattern['rules']])
-        print(f"  {pattern['icon']} {pattern['type']}: {rules_str}")
+    print(f"🎨 Patrones disponibles: {len(Pattern.get_all_types())}")
     print()
 
     wfc = WaveFunctionCollapse(
