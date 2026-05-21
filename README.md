@@ -6,7 +6,7 @@ Un incendio forestal se propaga en un grid 2D discreto. Tres tipos de agentes op
 
 # Roadmap
 ## World engine
-- [ ] Generación de biomas mediante Wave Function Collapse (WFC): Crear un generador de mapas que cree patrones de bosque, lagos y claros de forma coherente.
+- [X] Generación de biomas mediante Wave Function Collapse (WFC): Crear un generador de mapas que cree patrones de bosque, lagos y claros de forma coherente.
 - [ ] Simulador de propagación "Ignis":
     - [ ] Implementar algoritmo de fuego determinista basado en vecinos (Von Neumann o Moore).
     - [ ] Inyectar modificadores ambientales: Velocidad/dirección del viento y niveles de humedad.

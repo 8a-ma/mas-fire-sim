@@ -1,5 +1,5 @@
-from environment.patterns.builder import PatternBuilder
-from environment.patterns.registry import PatternRegistry
+from patterns.builder import PatternBuilder
+from patterns.registry import PatternRegistry
 
 # Al importar este módulo, grass queda registrado automáticamente.
 # No hace falta instanciar nada ni llamar ninguna función desde fuera.

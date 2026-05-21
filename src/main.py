@@ -1,7 +1,7 @@
 from collections import Counter
 from settings.settings import Settings
 from environment.pattern import Pattern
-from utils.wfc import WaveFunctionCollapse
+from environment.wfc import WaveFunctionCollapse
 
 
 def get_terrain_stats(wfc):

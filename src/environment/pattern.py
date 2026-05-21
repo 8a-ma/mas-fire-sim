@@ -1,8 +1,8 @@
-from environment.patterns.registry import PatternRegistry
-import environment.patterns.terrain.grass
-import environment.patterns.terrain.water
-import environment.patterns.terrain.mountain
-import environment.patterns.terrain.forest
+from patterns.registry import PatternRegistry
+import patterns.terrain.grass
+import patterns.terrain.water
+import patterns.terrain.mountain
+import patterns.terrain.forest
 
 
 Pattern = PatternRegistry
