@@ -12,7 +12,7 @@ class Settings:
     N_AGENTS: int = -1
 
     # --- GRID ---
-    GRID_SIZE: int = 256
+    GRID_SIZE: int = 32
     CELL_PX = 8
 
     # --- Windows ---

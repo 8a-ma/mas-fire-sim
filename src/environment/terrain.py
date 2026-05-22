@@ -90,3 +90,25 @@ class Terrain:
                         best_cell = (row, col)
  
         return best_cell
+
+    def set_state(self, row: int, col: int, state: str) -> None:
+        """
+        Cambia el fire_state de la celula.
+        state: "burned" | "burning" | "normal"
+        """
+
+        from environment.cell import FireState
+
+
+        cell = self.get_cell(row, col)
+
+        if cell is None: return
+
+        mapping = {
+            "normal": FireState.NORMAL,
+            "burning": FireState.BURNING,
+            "burned": FireState.BURNED,
+        }
+
+        if state in mapping:
+            cell.fire_state = mapping[state]
