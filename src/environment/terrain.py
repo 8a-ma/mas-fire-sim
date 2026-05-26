@@ -77,7 +77,7 @@ class Terrain:
         """
 
         min_entropy = float('inf')
-        candidates  = []
+        candidates = []
 
         for row in range(self.grid_size):
             for col in range(self.grid_size):
@@ -103,7 +103,6 @@ class Terrain:
         """
 
         from environment.cell import FireState
-
 
         cell = self.get_cell(row, col)
 

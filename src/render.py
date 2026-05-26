@@ -13,7 +13,7 @@ if TYPE_CHECKING:
 def hex_to_rgb(hex_color: str) -> Tuple[int, int, int]:
     h = hex_color.lstrip("#")
 
-    return tuple(int(h[i:i+2], 16) for i in (0, 2, 4))
+    return tuple(int(h[i:i + 2], 16) for i in (0, 2, 4))
 
 
 class Render:
@@ -28,7 +28,7 @@ class Render:
         self.settings = settings
         
         self.screen = pygame.display.set_mode((self.settings.WINDOW_W, self.settings.WINDOW_H))
-        self.clock  = pygame.time.Clock()
+        self.clock = pygame.time.Clock()
         pygame.display.set_caption(self.settings.TITLE)
 
         # Cachear colores base por tipo para no recalcular cada frame

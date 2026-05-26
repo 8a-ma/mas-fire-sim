@@ -2,10 +2,11 @@ from __future__ import annotations
 from typing import Set, Optional
 from enum import Enum, auto
 
+
 class FireState(Enum):
-    NORMAL      = auto()
-    BURNING     = auto()
-    BURNED      = auto()
+    NORMAL = auto()
+    BURNING = auto()
+    BURNED = auto()
 
 
 class Cell:
@@ -67,7 +68,6 @@ class Cell:
         """
 
         from patterns.registry import PatternRegistry
-        
         
         if not self.is_collapsed or self.fire_state != FireState.NORMAL: return False
 
