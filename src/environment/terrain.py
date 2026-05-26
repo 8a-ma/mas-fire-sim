@@ -1,3 +1,4 @@
+import random
 from environment.cell import Cell
 from typing import List, Tuple, Optional, Dict, Set
 
@@ -76,20 +77,24 @@ class Terrain:
         """
 
         min_entropy = float('inf')
-        best_cell = None
+        candidates  = []
 
         for row in range(self.grid_size):
             for col in range(self.grid_size):
                 cell = self.grid[row][col]
-                
+
                 # Ignorar celdas colapsadas
                 if not cell.is_collapsed:
-                    entropy = cell.get_entropy
-                    if entropy < min_entropy:
+                    if entropy:= cell.get_entropy < min_entropy:
+                        min_entropy = candidates = []
                         min_entropy = entropy
-                        best_cell = (row, col)
- 
-        return best_cell
+
+                        candidates = [(row, col)]
+                    
+                    elif entropy == min_entropy:
+                        candidates.append((row, col))
+
+        return random.choice(candidates) if candidates else None
 
     def set_state(self, row: int, col: int, state: str) -> None:
         """

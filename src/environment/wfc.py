@@ -1,7 +1,8 @@
 import random
+from collections import deque
+from typing import Optional, Set, Dict
 from environment.terrain import Terrain
 from environment.pattern import Pattern
-from typing import Optional, Set, Dict
 
 
 class WaveFunctionCollapse:
@@ -70,50 +71,45 @@ class WaveFunctionCollapse:
         cell = self.terrain.get_cell(row, col)
         cell.collapse(pattern_type)
  
-        return self._propagate()
+        return self._propagate(row, col)
     
-    def _propagate(self) -> bool:
+    def _propagate(self, start_row: int, start_col: int) -> bool:
         """
         Propaga las restricciones a través del terreno.
         Itera hasta que no haya cambios o se encuentra una contradicción
         """
+        queue = deque([(start_row, start_col)])
+        in_queue = {(start_row, start_col)}
 
-        changed = True
- 
-        while changed:
-            changed = False
- 
-            for row in range(self.grid_size):
-                for col in range(self.grid_size):
-                    cell = self.terrain.get_cell(row, col)
- 
-                    # Verificar contradicción
-                    if cell.get_entropy == 0:
+        while queue:
+            row, col = queue.popleft()
+            in_queue.discard((row, col))
+
+            for nr, nc, _ in self.terrain.get_neighbors(row, col):
+                neighbor = self.terrain.get_cell(nr, nc)
+
+                if neighbor.is_collapsed:
+                    continue
+                    
+                before = len(neighbor.possibilities)
+
+                collapsed_neighbor = self.terrain.get_cell(nr, nc)
+
+                if collapsed_neighbor.is_collapsed:
+                    neighbor_type = collapsed_neighbor.get_pattern_type()
+                    
+                    valid = {
+                        t for t in neighbor.possibilities
+                        if neighbor_type in self.adjacency_map.get(t, set())
+                    }
+
+                    if not neighbor.constrain(valid):
                         return False
- 
-                    # Si la celda no está colapsada, restringir basándose en vecinos
-                    if not cell.is_collapsed:
-                        new_possibilities = set(cell.possibilities)
- 
-                        for nr, nc, _ in self.terrain.get_neighbors(row, col):
-                            neighbor_cell = self.terrain.get_cell(nr, nc)
- 
-                            # Si el vecino está colapsado, restringir mi tipo
-                            if neighbor_cell.is_collapsed:
-                                neighbor_type = neighbor_cell.get_pattern_type()
-                                
-                                # Mantener solo tipos válidos que pueden ser vecinos del tipo colapsado
-                                valid_types = {
-                                    my_type for my_type in new_possibilities
-                                    if neighbor_type in self.adjacency_map.get(my_type, set())
-                                }
- 
-                                if valid_types != new_possibilities:
-                                    if not cell.constrain(valid_types):
-                                        return False
-                                    new_possibilities = cell.possibilities
-                                    changed = True
- 
+
+                if len(neighbor.possibilities) < before and (nr, nc) not in in_queue:
+                    queue.append((nr, nc))
+                    in_queue.add((nr, nc))
+        
         return True
 
     def _finalize_grid(self) -> None:
