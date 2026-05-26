@@ -80,10 +80,10 @@ def main() -> None:
                         fire = Fire(terrain, wind, seed=None)
                         fire_started = False
                 
-                # elif event.key == pygame.K_SPACE:
-                #     if not fire_started:
-                #         _start_fire_random(fire, terrain, settings.GRID_SIZE)
-                #         fire_started = True
+                elif event.key == pygame.K_SPACE:
+                    if not fire_started:
+                        _start_fire_random(fire, terrain, settings.GRID_SIZE)
+                        fire_started = True
         
         # Update sim
         sim_timer_ms += dt_ms
@@ -95,7 +95,7 @@ def main() -> None:
         # Render
         renderer.draw(terrain)
         renderer.present()
-        renderer.tick
+        renderer.tick()
     
     pygame.quit()
 
