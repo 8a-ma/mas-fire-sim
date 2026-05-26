@@ -27,7 +27,7 @@ class Fire:
         is_extinguished → bool
     """
 
-    def __init__(self, terrain: 'Terrain', wind: 'Wind', seed: Optional[int]):
+    def __init__(self, terrain: 'Terrain', wind: 'Wind', seed: Optional[int] = None):
         self.terrain = terrain
         self.wind = wind
         

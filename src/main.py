@@ -1,55 +1,103 @@
-from collections import Counter
-from settings.settings import Settings
+import pygame
+import random
+from typing import Optional, TYPE_CHECKING
 from environment.pattern import Pattern
+import patterns.terrain.grass
+import patterns.terrain.water
+import patterns.terrain.mountain
+from render import Render
+from simulation.fire import Fire
+from simulation.wind import Wind
+from settings.settings import Settings
 from environment.wfc import WaveFunctionCollapse
 
 
-def get_terrain_stats(wfc):
-    """Retorna estadísticas del terreno generado."""
-    terrain = wfc.terrain
-    types = []
-    
-    for r in range(terrain.grid_size):
-        for c in range(terrain.grid_size):
-            cell = terrain.get_cell(r, c)
-            types.append(cell.get_pattern_type())
-    
-    total = len(types)
-    counts = Counter(types)
-    
-    print(f"\n📊 Estadísticas del Terreno ({terrain.grid_size}x{terrain.grid_size}):")
-    print(f"Total de celdas: {total}")
-    for pattern_type, count in counts.most_common():
-        percentage = (count / total) * 100
-        print(f"  {pattern_type:12} {count:3} celdas ({percentage:5.1f}%)")
+if TYPE_CHECKING:
+    from environment.terrain import Terrain
 
 
-def main():
+def _start_fire_random(fire: Fire, terrain: 'Terrain', grid_size: int) -> None:
+    """Enciende una celda inflamable aleatoria del terreno."""
+
+    candidates = [
+        (col, row)
+        for col in range(grid_size)
+        for row in range(grid_size)
+        if terrain.get_cell(row, col).is_flammable
+    ]
+
+    if candidates:
+        x, y = random.choice(candidates)
+        fire.ignite(x, y)
+
+
+def main() -> None:
     settings = Settings()
 
-    print("🎮 Generador de Terreno - Wave Function Collapse")
-    print(f"📏 Tamaño de grilla: {settings.GRID_SIZE}x{settings.GRID_SIZE}")
-    print(f"🎨 Patrones disponibles: {len(Pattern.get_all_types())}")
-    print()
+    # --- 1. Generate world
+    wfc = WaveFunctionCollapse(grid_size=settings.GRID_SIZE, seed=None)
 
-    wfc = WaveFunctionCollapse(
-        grid_size=settings.GRID_SIZE,
-        seed=None  # Cambiar a un número específico para resultados reproducibles
-    )
-
-    print("🌍 Generando terreno...")
-    success = wfc.generate(max_attempts=4)
-
-    if not success:
-        print("❌ Error: No se pudo generar un terreno válido después de varios intentos.")
+    if not wfc.generate():
+        print("No se pudo generar el terreno")
         return
+    
+    terrain = wfc.terrain
 
-    print("✅ ¡Terreno generado exitosamente!")
-    print()
-    print("=" * (settings.GRID_SIZE * 2))
-    print(wfc.render())
-    print("=" * (settings.GRID_SIZE * 2))
-    print()
+    # --- 2. Create simulation
+    directions = [0, 45, 90, 180, 270]
+    direction = random.choice(directions)
+    print('Direction deg wind', direction)
+    
+    wind = Wind(direction_deg=direction, speed=1.5)
+    fire = Fire(terrain, wind, seed=None)
+
+    # --- 3. Render
+    renderer = Render(settings)
+
+    # --- 4. Game Loop
+    running = True
+    sim_timer_ms = 0
+    fire_started = False
+
+    while running:
+        dt_ms = renderer.clock.get_time()
+
+        # Events
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    running = False
+
+                # regenerate world
+                elif event.key == pygame.K_r:
+                    wfc = WaveFunctionCollapse(grid_size=settings.GRID_SIZE, seed=None)
+
+                    if wfc.generate():
+                        terrain = wfc.terrain
+                        fire = Fire(terrain, wind, seed=None)
+                        fire_started = False
+                
+                # elif event.key == pygame.K_SPACE:
+                #     if not fire_started:
+                #         _start_fire_random(fire, terrain, settings.GRID_SIZE)
+                #         fire_started = True
+        
+        # Update sim
+        sim_timer_ms += dt_ms
+
+        if fire_started and sim_timer_ms >= settings.SIM_TICK_MS:
+            fire.step()
+            sim_timer_ms = 0
+        
+        # Render
+        renderer.draw(terrain)
+        renderer.present()
+        renderer.tick
+    
+    pygame.quit()
 
 
 if __name__ == '__main__':
