@@ -1,11 +1,7 @@
 import pygame
 import random
-from typing import Optional, TYPE_CHECKING
-from environment.pattern import Pattern
-import patterns.terrain.grass
-import patterns.terrain.water
-import patterns.terrain.mountain
 from render import Render
+from typing import TYPE_CHECKING
 from simulation.fire import Fire
 from simulation.wind import Wind
 from settings.settings import Settings
