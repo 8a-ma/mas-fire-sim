@@ -10,7 +10,7 @@ if TYPE_CHECKING:
     from simulation.wind import Wind
     from environment.terrain import Terrain
     from simulation.agents.base_agents import BaseAgent
-    # from settings.event_logger import EventLogger
+    from settings.event_logger import EventLogger
 
 
 class Engine:
@@ -19,13 +19,13 @@ class Engine:
     Tiene visión global pero no toma decisiones de control.
     """
 
-    def __init__(self, terrain: 'Terrain', fire: 'Fire', wind: 'Wind', agents: List['BaseAgent']):
+    def __init__(self, terrain: 'Terrain', fire: 'Fire', wind: 'Wind', agents: List['BaseAgent'], logger: 'EventLogger'):
         self.terrain = terrain
         self.fire = fire
         self.wind = wind
 
         self.agents = agents
-        # self.logger = logger
+        self.logger = logger
         self.graph = CommGraph(agents)
         self.tick_n = 0
 
@@ -38,10 +38,10 @@ class Engine:
             context = self._build_context(agent, neighbors)
             agent.step(dt, context)
 
-            # self.logger.log_agent_step(self.tick_n, agent)
+            self.logger.log_agent_step(self.tick_n, agent)
         
         self.fire.step(dt)
-        # self.logger.log_fire_state(self.tick_n, self.fire)
+        self.logger.log_fire_state(self.tick_n, self.fire)
     
     def _build_context(self, agent: 'BaseAgent', neighbors: List[Optional['BaseAgent']]) -> SimContext:
         """
