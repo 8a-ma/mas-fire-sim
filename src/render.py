@@ -16,7 +16,7 @@ def hex_to_rgb(hex_color: str) -> Tuple[int, int, int]:
     return tuple(int(h[i:i + 2], 16) for i in (0, 2, 4))
 
 
-class Render:
+class Renderer:
     """
     Dibuja el estado del Terrain sobre una Surface de pygame.
     No maneja eventos ni lógica; sólo renderiza.

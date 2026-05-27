@@ -7,10 +7,10 @@ Un incendio forestal se propaga en un grid 2D discreto. Tres tipos de agentes op
 # Roadmap
 ## World engine
 - [X] Generación de biomas mediante Wave Function Collapse (WFC): Crear un generador de mapas que cree patrones de bosque, lagos y claros de forma coherente.
-- [ ] Simulador de propagación "Ignis":
-    - [ ] Implementar algoritmo de fuego determinista basado en vecinos (Von Neumann o Moore).
-    - [ ] Inyectar modificadores ambientales: Velocidad/dirección del viento y niveles de humedad.
-- [ ] Tick System: Implementar el motor de tiempo por pasos (ticks) configurable para la simulación.
+- [X] Simulador de propagación "Ignis":
+    - [X] Implementar algoritmo de fuego determinista basado en vecinos (Von Neumann o Moore).
+    - [X] Inyectar modificadores ambientales: Velocidad/dirección del viento y niveles de humedad.
+- [X] Tick System: Implementar el motor de tiempo por pasos (ticks) configurable para la simulación.
 
 ## Infraestructura
 - [ ] Caja Negra (Logging): Implementar un logger de eventos en tiempo real para capturar cada mensaje y cambio de estado del fuego.

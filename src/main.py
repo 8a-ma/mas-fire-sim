@@ -1,6 +1,6 @@
 import pygame
 import random
-from render import Render
+from render import Renderer
 from typing import TYPE_CHECKING
 from simulation.fire import Fire
 from simulation.wind import Wind
@@ -48,7 +48,7 @@ def main() -> None:
     fire = Fire(terrain, wind, seed=None)
 
     # --- 3. Render
-    renderer = Render(settings)
+    renderer = Renderer(settings)
 
     # --- 4. Game Loop
     running = True
