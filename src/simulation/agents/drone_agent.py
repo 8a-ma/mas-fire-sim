@@ -37,8 +37,8 @@ class DroneAgent(BaseAgent):
             return
 
         self.status = AgentState.ACTIVE
-        drone_neighbors = [n for n in context.neighbors if isinstance(n, 'DroneAgent')]
+        drone_neighbors = [n for n in context.neighbors if type(n).__name__ == 'DroneAgent']
 
         force = self._attraction(target, alpha=context.alpha) + self._repulsion(drone_neighbors, min_dist=20.0)
 
-        self._move(force, dt)
+        self._move(force, dt, context.terrain.grid_size)
