@@ -23,7 +23,7 @@ class CommGraph:
 
         for idx, agent in enumerate(self.agents):
             for b in self.agents[idx + 1:]:
-                dist = np.linalg.norm(agent.pos, b.pos)
+                dist = np.linalg.norm(agent.pos - b.pos)
 
                 if dist <= min(agent.comm_radius, b.comm_radius):
                     self._edges[agent.id].append(b)
