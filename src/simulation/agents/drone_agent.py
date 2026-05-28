@@ -1,4 +1,5 @@
 import numpy as np
+from pygame import Surface
 from simulation.agents.base_agents import BaseAgent, AgentState
 from typing import TYPE_CHECKING
 
@@ -42,3 +43,6 @@ class DroneAgent(BaseAgent):
         force = self._attraction(target, alpha=context.alpha) + self._repulsion(drone_neighbors, min_dist=20.0)
 
         self._move(force, dt, context.terrain.grid_size)
+    
+    def get_sprite(self) -> Surface:
+        return Surface((2, 2)).fill("#051054")

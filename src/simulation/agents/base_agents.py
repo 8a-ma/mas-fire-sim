@@ -1,5 +1,6 @@
 from __future__ import annotations
 import numpy as np
+from pygame import Surface
 from enum import Enum, auto
 from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING
@@ -35,6 +36,11 @@ class BaseAgent(ABC):
     @abstractmethod
     def step(self, dt: float, context: 'SimContext') -> None:
         """Avanza el agente un tick. Debe actualizar self.pos y self.status."""
+        pass
+
+    @abstractmethod
+    def get_sprite(self) -> Surface:
+        """Representación visual del agente."""
         pass
 
     def _attraction(self, target: np.ndarray, alpha: float) -> np.ndarray:
