@@ -8,6 +8,7 @@ from typing import Tuple, Dict, TYPE_CHECKING
 
 if TYPE_CHECKING:
     from environment.cell import Cell
+    from simulation.agents.base_agents import BaseAgent
 
 
 def hex_to_rgb(hex_color: str) -> Tuple[int, int, int]:
@@ -77,3 +78,27 @@ class Renderer:
             )
         
         return self._color_cache[pattern_type]
+
+
+class Camera:
+    """Gestiona el modo de vista y el agente seguido."""
+
+    def __init__(self):
+        self.mode: str = "eagle"  # eagle | agent
+        self.followed_agent: 'BaseAgent' | None = None
+    
+    def follow(self, agent: 'BaseAgent') -> None:
+        self.mode = "agent"
+        self.followed_agent = agent
+    
+    def release(self) -> None:
+        self.mode = "eagle"
+        self.followed_agent = None
+
+    def world_to_screen(self):
+        """
+        Convierte coordenada de mundo a píxel de pantalla.
+        En EAGLE_VIEW se ve todas las casillas
+        En AGENT_VIEW modifica el brillo de las casillas que se pueden ver de las que no. Las casillas prendidas fuego, quemadas o ardiendo no se pueden ver hasta que el agente pueda verlas
+        """
+        ...

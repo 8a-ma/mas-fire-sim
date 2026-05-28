@@ -85,8 +85,10 @@ class Terrain:
 
                 # Ignorar celdas colapsadas
                 if not cell.is_collapsed:
-                    if entropy:= cell.get_entropy < min_entropy:
-                        min_entropy = candidates = []
+                    entropy = cell.get_entropy
+                    if entropy < min_entropy:
+                        min_entropy = []
+                        candidates = []
                         min_entropy = entropy
 
                         candidates = [(row, col)]

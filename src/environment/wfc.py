@@ -61,7 +61,7 @@ class WaveFunctionCollapse:
                     # El colapso falló, intentar siguiente iteración
                     break
             
-            return False
+        return False
     
     def _collapse_cell(self, row: int, col: int, pattern_type: str) -> bool:
         """
@@ -121,7 +121,7 @@ class WaveFunctionCollapse:
             for col in range(self.grid_size):
                 cell = self.terrain.get_cell(row, col)
 
-                if not cell.is_collapsed and cell.get_entropy > 0:
+                if not cell.is_collapsed or cell.get_entropy > 0:
                     chosen_type = self._get_weighted_type(row, col, cell.possibilities)
                     cell.collapse(chosen_type)
     
