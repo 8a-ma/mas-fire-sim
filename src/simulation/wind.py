@@ -17,7 +17,7 @@ class Wind:
     direction_deg: float
     speed: float = 0.0
 
-    def __pos_init__(self) -> None:
+    def __post_init__(self) -> None:
         if self.speed < 0:
             ValueError(f"speed debe ser >= 0, recibido: {self.speed}")
         
