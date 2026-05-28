@@ -66,6 +66,6 @@ class BaseAgent(ABC):
 
     def __repr__(self) -> str:
         return (
-            f"{self.__class__.__name__}(id={self.agent_id}, "
+            f"{self.__class__.__name__}(id={self.id}, "
             f"pos={self.pos.round(1)}, status={self.status})"
         )
