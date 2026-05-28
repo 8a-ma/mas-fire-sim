@@ -18,7 +18,7 @@ def vote_consensus(my_vote: np.ndarray, neighbor_votes: list[np.ndarray], neighb
 
     if not neighbor_votes: return my_vote.copy()
 
-    correction = np.zeros()
+    correction = np.zeros(2)
 
     for vote_j, dist_j in zip(neighbor_votes, neighbor_distances):
         w_ij = 1.0 / (1.0 + dist_j)
