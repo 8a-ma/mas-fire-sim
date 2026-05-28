@@ -55,7 +55,7 @@ class EventLogger:
             wind_speed=wind_speed
         )
     
-    def log_fire_stats(self, tick: int, fire: 'Fire') -> None:
+    def log_fire_state(self, tick: int, fire: 'Fire') -> None:
         self.log(
             tick,
             "FIRE_SPREAD",
