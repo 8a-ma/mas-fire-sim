@@ -1,9 +1,10 @@
+from __future__ import annotations
 import pygame
 from settings.settings import Settings
 from environment.cell import FireState
 from environment.terrain import Terrain
 from patterns.registry import PatternRegistry
-from typing import Tuple, Dict, TYPE_CHECKING, List
+from typing import Tuple, Dict, TYPE_CHECKING, List, Optional
 
 
 if TYPE_CHECKING:
@@ -35,7 +36,7 @@ class Renderer:
         # Cachear colores base por tipo para no recalcular cada frame
         self._color_cache: Dict[str, Tuple[int, int, int]] = {}
     
-    def draw(self, terrain: Terrain, agents: List[BaseAgent] | None):
+    def draw(self, terrain: Terrain, agents: Optional[List['BaseAgent']] = None):
         """Dibuja todos los tiles del terreno en pantalla."""
 
         for row in range(terrain.grid_size):
@@ -52,13 +53,13 @@ class Renderer:
 
                 pygame.draw.rect(self.screen, color, rect)
         
-        if agents is not None:
-            for agent in agents:
-                sprite = agent.get_sprite()
-                col, row = int(agent.pos[0]), int(agent.pos[1])
-                x_px = col * self.settings.CELL_PX + (self.settings.CELL_PX - sprite.get_width()) // 2
-                y_px = row * self.settings.CELL_PX + (self.settings.CELL_PX - sprite.get_height()) // 2
-                self.screen.blit(sprite, (x_px, y_px))
+        # if agents is not None:
+        #     for agent in agents:
+        #         sprite = agent.get_sprite()
+        #         col, row = int(agent.pos[0]), int(agent.pos[1])
+        #         x_px = col * self.settings.CELL_PX + (self.settings.CELL_PX - sprite.get_width()) // 2
+        #         y_px = row * self.settings.CELL_PX + (self.settings.CELL_PX - sprite.get_height()) // 2
+        #         self.screen.blit(sprite, (x_px, y_px))
     
     def present(self) -> None:
         """Flip del buffer. Llamar una vez por frame, después de draw()."""
