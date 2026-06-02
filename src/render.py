@@ -54,7 +54,9 @@ class Renderer:
                 pygame.draw.rect(self.screen, color, rect)
         
     def draw_agents(self, agents: List[BaseAgent]) -> None:
-        pass
+        """Dibuja todos los agentes en el terreno en pantalla."""
+        for agent in agents:
+            self.screen.blit(agent.get_sprite(), tuple(agent.pos))
     
     def present(self) -> None:
         """Flip del buffer. Llamar una vez por frame, después de draw()."""

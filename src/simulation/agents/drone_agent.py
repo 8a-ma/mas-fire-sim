@@ -45,4 +45,6 @@ class DroneAgent(BaseAgent):
         self._move(force, dt, context.terrain.grid_size)
     
     def get_sprite(self) -> Surface:
-        return Surface((2, 2)).fill("#051054")
+        sprite = Surface((2, 2))
+        sprite.fill("#051054")
+        return sprite

@@ -2,7 +2,7 @@ from pathlib import Path
 
 
 class Settings:
-    N_AGENTS: int = -1
+    N_AGENTS: int = 4
 
     # --- GRID ---
     GRID_SIZE: int = 48

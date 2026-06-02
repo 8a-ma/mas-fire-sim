@@ -1,12 +1,16 @@
 import pygame
 import random
+import numpy as np
 from render import Renderer
-from typing import TYPE_CHECKING
 from simulation.wind import Wind
 from simulation.fire import Fire
+from simulation.engine import Engine
 from settings.settings import Settings
+from typing import TYPE_CHECKING, List
 from settings.event_logger import EventLogger
 from environment.wfc import WaveFunctionCollapse
+from simulation.agents.base_agents import BaseAgent
+from simulation.agents.drone_agent import DroneAgent
 
 
 if TYPE_CHECKING:
@@ -27,6 +31,9 @@ class Simulation:
 
         self._wind: Wind | None = None
         self._fire: Fire | None = None
+
+        self._agents: List[BaseAgent | None] = []
+        self._engine: Engine | None = None
 
         self._build_world()
         self._build_agents()
@@ -66,7 +73,23 @@ class Simulation:
         self._fire = Fire(self._terrain, self._wind, seed=None)
     
     def _build_agents(self) -> None:
-        pass
+        """Instancia los agentes según configuración."""
+
+        self._agents = []
+
+        for i in range(self._settings.N_AGENTS):
+            self._agents.append(DroneAgent(
+                i,
+                np.array([random.randint(0, self._terrain.grid_size - 1), random.randint(0, self._terrain.grid_size - 1)])
+            ))
+
+        self._engine = Engine(
+            self._terrain,
+            self._fire,
+            self._wind,
+            self._agents,
+            self._logger
+        )
 
     def _start_fire_random(self) -> None:
         """Enciende una celda inflamable aleatoria del terreno."""
@@ -106,6 +129,7 @@ class Simulation:
             self._terrain = self._wfc.terrain
             self._fire = Fire(self._terrain, self._wind, seed=None)
             self._fire_started = False
+            self._build_agents()
     
     def _ignite_fire(self) -> None:
         if not self._fire_started:
@@ -117,9 +141,11 @@ class Simulation:
 
         if self._fire_started and self._sim_timer_ms >= self._settings.SIM_TICK_MS:
             self._fire.step()
+            self._engine.step()
             self._sim_timer_ms = 0
 
     def _render(self) -> None:
         self._renderer.draw(self._terrain)
+        self._renderer.draw_agents(self._agents)
         self._renderer.present()
         self._renderer.tick()
