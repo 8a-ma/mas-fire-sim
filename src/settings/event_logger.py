@@ -64,7 +64,7 @@ class EventLogger:
             is_extinguished=fire.is_extinguished
         )
     
-    def log_agent_step(self, tick: int, agent:'BaseAgent') -> None:
+    def log_agent_step(self, tick: int, agent: 'BaseAgent') -> None:
         self.log(
             tick,
             "AGENT_MOVED",

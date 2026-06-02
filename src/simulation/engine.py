@@ -71,6 +71,3 @@ class Engine:
         dists = np.linalg.norm(pts - agent.pos, axis=1)
 
         return [c for c, d in zip(cells, dists) if d <= agent.vision_radius]
-    
-
-
