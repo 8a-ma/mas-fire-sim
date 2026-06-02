@@ -73,7 +73,7 @@ class Fire:
                 if cell is None or not cell.is_flammable:
                     continue
 
-                prob = self._spread_probability(cx, cy, nx, ny, bias) * dt
+                prob = self._spread_probability(cx, cy, nx, ny, bias) * (1 - math.exp(-1.5 * dt))
 
                 if self._rng.random() < prob:
                     new_ignitions.add((nx, ny))
