@@ -56,7 +56,12 @@ class Renderer:
     def draw_agents(self, agents: List[BaseAgent]) -> None:
         """Dibuja todos los agentes en el terreno en pantalla."""
         for agent in agents:
-            self.screen.blit(agent.get_sprite(), tuple(agent.pos))
+            sprite = agent.get_sprite()
+            col, row = int(agent.pos[0]), int(agent.pos[0])
+            x_px = col * self.settings.CELL_PX + (self.settings.CELL_PX - sprite.get_width()) // 2
+            y_px = row * self.settings.CELL_PX + (self.settings.CELL_PX - sprite.get_height()) // 2
+
+            self.screen.blit(sprite, (x_px, y_px))
     
     def present(self) -> None:
         """Flip del buffer. Llamar una vez por frame, después de draw()."""
