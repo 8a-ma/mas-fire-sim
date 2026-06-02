@@ -31,8 +31,8 @@ class Fire:
         self.terrain = terrain
         self.wind = wind
         
-        self.base_spread_prob = Settings.get_setting('FIRE_SPREAD_PROB')
-        self.burn_duration = Settings.get_setting('FIRE_BURN_DURATION')
+        self.base_spread_prob = Settings.FIRE_SPREAD_PROB
+        self.burn_duration = Settings.FIRE_BURN_DURATION
 
         self._rng = np.random.default_rng(seed)
 
@@ -149,7 +149,7 @@ class Fire:
         alignment = dx_n * bias[0] + dy_n * bias[1]
 
         prob = self.base_spread_prob * (
-            1.0 + self.wind.speed * Settings.get_setting('WIND_INFLUENCE') * alignment
+            1.0 + self.wind.speed * Settings.WIND_INFLUENCE * alignment
         )
 
         return max(0.0, min(1.0, prob))

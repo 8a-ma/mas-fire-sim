@@ -28,7 +28,3 @@ class Settings:
     COLOR_BURNED = (30, 20, 10)    
 
     ROOT_PATH = Path(__file__).resolve().parents[1]
-
-    @classmethod
-    def get_setting(cls: 'Settings', const: str) -> any:
-        return getattr(cls, const, None)
