@@ -13,7 +13,7 @@ Un incendio forestal se propaga en un grid 2D discreto. Tres tipos de agentes op
 - [X] Tick System: Implementar el motor de tiempo por pasos (ticks) configurable para la simulación.
 
 ## Infraestructura
-- [ ] Caja Negra (Logging): Implementar un logger de eventos en tiempo real para capturar cada mensaje y cambio de estado del fuego.
+- [X] Caja Negra (Logging): Implementar un logger de eventos en tiempo real para capturar cada mensaje y cambio de estado del fuego.
 
 ## Respuesta (Agentes)
 - [ ] Mecánicas de "Fog of War": Implementar el sistema de visión parcial. Los agentes solo conocen el estado del fuego en su radio de acción.
