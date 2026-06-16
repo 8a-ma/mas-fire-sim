@@ -25,6 +25,7 @@ class Fire:
         perimeter       → [[x, y], ...]  frente de avance del fuego
         area            → int            total de celdas afectadas
         is_extinguished → bool
+        dirty_cells     → {(x, y), ...}  celdas que cambiaron de estado en el último step
     """
 
     def __init__(self, terrain: 'Terrain', wind: 'Wind', seed: Optional[int] = None):
@@ -38,6 +39,7 @@ class Fire:
 
         self._active: Dict[Tuple[int, int], int] = {}  # {(x,y): ticks_restantes}
         self._burned: Set[Tuple[int, int]] = set()
+        self._last_changed: Set[Tuple[int, int]] = set()
     
     def ignite(self, x: int, y: int) -> bool:
         """
@@ -57,6 +59,8 @@ class Fire:
 
     def step(self, dt: float = 1.0) -> None:
         """Avanza la simulación un tick."""
+
+        self._last_changed.clear()
 
         bias = self.wind.bias_vector
         new_ignitions: Set[Tuple[int, int]] = set()
@@ -100,6 +104,13 @@ class Fire:
             if cell: cell.ignite()
 
             self._active[pos] = self.burn_duration
+
+        self._last_changed = new_ignitions | to_burnout
+    
+    @property
+    def dirty_cells(self) -> Set[Tuple[int, int]]:
+        """Retorna las celdas cuyo fire_state cambió en el último step()."""
+        return self._last_changed
     
     @property
     def cells(self) -> List[List[int]]:
