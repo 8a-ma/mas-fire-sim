@@ -145,7 +145,6 @@ class Simulation:
             self._sim_timer_ms = 0
 
     def _render(self) -> None:
-        self._renderer.draw(self._terrain)
-        self._renderer.draw_agents(self._agents)
-        self._renderer.present()
+        self._renderer.draw(self._terrain, self._agents)
+        self._renderer.present() # dirty_rects punto 4
         self._renderer.tick()

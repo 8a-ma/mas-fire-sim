@@ -36,32 +36,42 @@ class Renderer:
         # Cachear colores base por tipo para no recalcular cada frame
         self._color_cache: Dict[str, Tuple[int, int, int]] = {}
     
-    def draw(self, terrain: Terrain):
+    def draw(self, terrain: Terrain, agents: List[BaseAgent]) -> List[pygame.Rect]:
         """Dibuja todos los tiles del terreno en pantalla."""
 
-        for row in range(terrain.grid_size):
-            for col in range(terrain.grid_size):
-                cell = terrain.get_cell(row, col)
+        terrain_rects = self._draw_terrain(terrain)
+        agents_rects = self._draw_agents(agents)
 
-                color = self._resolve_color(cell)
+        return terrain_rects + agents_rects
+
+        # for row in range(terrain.grid_size):
+        #     for col in range(terrain.grid_size):
+        #         cell = terrain.get_cell(row, col)
+
+        #         color = self._resolve_color(cell)
                 
-                rect = pygame.Rect(
-                    col * self.settings.CELL_PX,
-                    row * self.settings.CELL_PX,
-                    self.settings.CELL_PX, self.settings.CELL_PX
-                )
+        #         rect = pygame.Rect(
+        #             col * self.settings.CELL_PX,
+        #             row * self.settings.CELL_PX,
+        #             self.settings.CELL_PX, self.settings.CELL_PX
+        #         )
 
-                pygame.draw.rect(self.screen, color, rect)
+        #         pygame.draw.rect(self.screen, color, rect)
+    
+    def _draw_terrain(self, terrain: Terrain) -> List[pygame.Rect]:
+        pass
         
-    def draw_agents(self, agents: List[BaseAgent]) -> None:
+    def _draw_agents(self, agents: List[BaseAgent]) -> List[pygame.Rect]:
         """Dibuja todos los agentes en el terreno en pantalla."""
-        for agent in agents:
-            sprite = agent.get_sprite()
-            col, row = int(agent.pos[0]), int(agent.pos[0])
-            x_px = col * self.settings.CELL_PX + (self.settings.CELL_PX - sprite.get_width()) // 2
-            y_px = row * self.settings.CELL_PX + (self.settings.CELL_PX - sprite.get_height()) // 2
+        pass
+        # for agent in agents:
+        #     sprite = agent.get_sprite()
+        #     col, row = int(agent.pos[0]), int(agent.pos[0])
+        #     x_px = col * self.settings.CELL_PX + (self.settings.CELL_PX - sprite.get_width()) // 2
+        #     y_px = row * self.settings.CELL_PX + (self.settings.CELL_PX - sprite.get_height()) // 2
 
-            self.screen.blit(sprite, (x_px, y_px))
+        #     self.screen.blit(sprite, (x_px, y_px))
+
     
     def present(self) -> None:
         """Flip del buffer. Llamar una vez por frame, después de draw()."""

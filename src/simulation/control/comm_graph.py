@@ -1,5 +1,5 @@
 import numpy as np
-from typing import TYPE_CHECKING, List, Dict, Optional
+from typing import TYPE_CHECKING, List, Dict, Optional, Set
 
 
 if TYPE_CHECKING:
@@ -34,3 +34,37 @@ class CommGraph:
 
     def degree(self, agent: 'BaseAgent') -> int:
         return len(self.neighbors_of(agent))
+    
+    def drone_backbone_components(self) -> Dict[int, Set['BaseAgent']]:
+        """Componentes conexas considerando solo aristas dron-dron."""
+        from simulation.agents.drone_agent import DroneAgent
+
+        drones = [a for a in self.agents if isinstance(a, DroneAgent)]
+        visited: Set[int] = set()
+        components: Dict[int, Set['BaseAgent']] = {}
+
+        for drone in drones:
+            if drone.id in visited:
+                continue
+            component = self._bfs_component(drone, visited, only_type=DroneAgent)
+
+            for d in component:
+                components[d.id] = component
+        
+        return components
+    
+    def _bfs_component(drone: 'BaseAgent', visited: set, only_type: 'BaseAgent'):
+        ...
+
+    def relayed_drones_for(self, ground_agent: 'BaseAgent') -> Set['BaseAgent']:
+        """Drones alcanzables por `ground_agent`: 1 salto directo + backbone de cada uno."""
+        from simulation.agents.drone_agent import DroneAgent
+
+        components = self.drone_backbone_components()
+        direct_drones = [n for n in self.neighbors_of(ground_agent) if isinstance(n, DroneAgent)]
+        reachable: Set['BaseAgent'] = set()
+
+        for d in direct_drones:
+            reachable |= components.get(d.id, {d})
+            
+        return reachable

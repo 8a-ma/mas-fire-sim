@@ -9,8 +9,9 @@ if TYPE_CHECKING:
     from simulation.fire import Fire
     from simulation.wind import Wind
     from environment.terrain import Terrain
-    from simulation.agents.base_agents import BaseAgent
     from settings.event_logger import EventLogger
+    from simulation.agents.base_agents import BaseAgent
+    from simulation.agents.drone_agent import DroneAgent
 
 
 class Engine:
@@ -50,6 +51,12 @@ class Engine:
         """
         visible_cells = self._filter_by_fow(agent, self.fire.cells)
         visible_perimeter = self._filter_by_fow(agent, self.fire.perimeter)
+
+        if not isinstance(agent, 'DroneAgent'):
+            for drone in self.graph.relayed_drones_for(agent):
+                # visible_cells = _merge_unique(visible_cells, self._filter_by_fow(drone, self.fire.cells))
+                # visible_perimeter = _merge_unique(visible_perimeter, self._filter_by_fow(drone, self.fire.perimeter))
+                pass
 
         return SimContext(
             fire_cells=visible_cells,
