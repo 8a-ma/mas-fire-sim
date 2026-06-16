@@ -25,6 +25,9 @@ class BaseAgent(ABC):
     Cada subclase implementa step() con su propia ley de control.
     La física común (atracción, repulsión, movimiento) vive aquí.
     """
+
+    _sprite: Surface | None = None
+
     def __init__(self, id: int, pos: np.ndarray, max_speed: float, comm_radius: float, vision_radius: float, status: AgentState = AgentState.ACTIVE):
         self.id = id
         self.pos = pos.astype(float)
@@ -38,10 +41,18 @@ class BaseAgent(ABC):
         """Avanza el agente un tick. Debe actualizar self.pos y self.status."""
         pass
 
-    @abstractmethod
+    @classmethod
+    def _build_sprite(cls) -> Surface:
+        """Cada subclase define cómo construir su sprite una sola vez."""
+        raise NotImplementedError
+
     def get_sprite(self) -> Surface:
-        """Representación visual del agente."""
-        pass
+        cls = type(self)
+
+        if cls._sprite is None:
+            cls._sprite = cls._build_sprite()
+        
+        return cls._sprite
 
     def _attraction(self, target: np.ndarray, alpha: float) -> np.ndarray:
         return ctrl_attraction(self.pos, target, alpha)

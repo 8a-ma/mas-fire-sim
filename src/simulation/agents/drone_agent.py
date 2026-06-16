@@ -18,6 +18,8 @@ class DroneAgent(BaseAgent):
         vision_radius = 40.0  celdas
     """
 
+    _sprite: Surface | None = None
+
     def __init__(self, id: int, pos: np.ndarray) -> None:
         super().__init__(
             id=id,
@@ -43,8 +45,9 @@ class DroneAgent(BaseAgent):
         force = self._attraction(target, alpha=context.alpha) + self._repulsion(drone_neighbors, min_dist=20.0)
 
         self._move(force, dt, context.terrain.grid_size)
-    
-    def get_sprite(self) -> Surface:
+
+    @classmethod
+    def _build_sprite(cls) -> Surface:
         sprite = Surface((2, 2))
         sprite.fill("#051054")
         return sprite
