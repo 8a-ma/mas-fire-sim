@@ -16,6 +16,7 @@ class AgentState(Enum):
     DEPLOYING = auto()
     IDLE = auto()
     OUT_OF_RANGE = auto()
+    PATROLLING = auto()
 
 
 class BaseAgent(ABC):

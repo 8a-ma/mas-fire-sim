@@ -35,16 +35,32 @@ class DroneAgent(BaseAgent):
         self.last_visible_cells = context.fire_cells
 
         target = self._nearest(context.fire_perimeter)
+
         if target is None: 
-            self.status = AgentState.IDLE
-            return
+            self.status = AgentState.PATROLLING
+            target = self._next_patrol_waypoint(context.terrain.grid_size, len(context.agent_pos))
+        
+        else:
+            self.status = AgentState.ACTIVE
 
-        self.status = AgentState.ACTIVE
-        drone_neighbors = [n for n in context.neighbors if type(n).__name__ == 'DroneAgent']
-
+        drone_neighbors = [n for n in context.neighbors if isinstance(n, DroneAgent)]
         force = self._attraction(target, alpha=context.alpha) + self._repulsion(drone_neighbors, min_dist=20.0)
-
         self._move(force, dt, context.terrain.grid_size)
+    
+    def _next_patrol_waypoint(self, grid_size: int, n_agents: int) -> np.ndarray | None:
+        x, y = np.meshgrid(np.array(grid_size), np.array(grid_size), indexing='ij')
+        all_pts = np.stack([x, y], axis=-1).reshape(-1, 2)
+
+        flat_indices = np.arange(len(all_pts))
+
+        my_pts = all_pts[flat_indices % n_agents == self.id % n_agents]
+
+        if len(my_pts) == 0:
+            return None
+        
+        dists = np.linalg.norm(my_pts - self.pos, axis=1)
+
+        return my_pts[np.argmin(dists)]
 
     @classmethod
     def _build_sprite(cls) -> Surface:
